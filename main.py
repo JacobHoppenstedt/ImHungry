@@ -1,4 +1,3 @@
-#test
 from io import BytesIO
 from PIL import Image, ImageTk
 import requests
@@ -98,8 +97,8 @@ class RecipeApp(object):
 # Create App and run the app
 if __name__ == "__main__":
     # API Keys
-    APP_ID = "d7693791"  # Put your app id for edamam api
-    APP_KEY = "45245c3bdf08480ea5e2a503ffe7bba2"  # Put your app key for edamam api
+    APP_ID = "d7693791"
+    APP_KEY = "45245c3bdf08480ea5e2a503ffe7bba2"
 
     recipe_app = RecipeApp(APP_ID, APP_KEY)
     recipe_app.run_app()
