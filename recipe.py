@@ -4,3 +4,4 @@ class Recipe:
         self.time = time
         self.rating = rating
         self.ingredients = ingredients
+
