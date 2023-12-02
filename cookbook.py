@@ -26,25 +26,27 @@ class CookBook:
         return "Recipe not found"
 
 
-    # def quicksort_by_time(self):
-    #         self.recipe_list = self._quicksort_by_time(self.recipe_list)
+    def quicksort_by_time(self):
+            self.recipe_list = self._quicksort_by_time(self.recipe_list)
 
-    # def _quicksort_by_time(self, recipes):
-    #     if len(recipes) <= 1:
-    #         return recipes
+    def _quicksort_by_time(self, recipes):
+        if len(recipes) <= 1:
+            return recipes
 
-    #     # Use the first recipe as the pivot
-    #     pivot_recipe = recipes[0]
-    #     pivot_time = pivot_recipe.time_in_minutes()
+        # Use the first recipe as the pivot
+        pivot_recipe = recipes[0]
+        pivot_time = pivot_recipe.time_in_minutes()
 
-    #     # Skip recipes with 'N/A' when comparing times
-    #     less = [recipe for recipe in recipes[1:] if recipe.time_in_minutes() < pivot_time]
-    #     equal = [recipe for recipe in recipes[1:] if recipe.time_in_minutes() == pivot_time]
-    #     greater = [recipe for recipe in recipes[1:] if recipe.time_in_minutes() > pivot_time]
-    #     na_recipes = [recipe for recipe in recipes[1:] if recipe.time_in_minutes() == float('inf')]
+        # Skip recipes with 'N/A' when comparing times
+        less = [recipe for recipe in recipes[1:] if recipe.time_in_minutes() < pivot_time]
+        equal = [recipe for recipe in recipes[1:] if recipe.time_in_minutes() == pivot_time]
+        greater = [recipe for recipe in recipes[1:] if recipe.time_in_minutes() > pivot_time]
+        na_recipes = [recipe for recipe in recipes[1:] if recipe.time_in_minutes() == float('inf')]
 
-    #     sorted_recipes = self._quicksort_by_time(less) + equal + self._quicksort_by_time(greater) + na_recipes
-    #     return sorted_recipes[:pivot_index] + [recipes[pivot_index]] + sorted_recipes[pivot_index + 1:]
+        # Recursively apply quicksort to less and greater portions
+        sorted_recipes = self._quicksort_by_time(less) + [pivot_recipe] + equal + self._quicksort_by_time(greater) + na_recipes
+        return sorted_recipes
+
 
     def mergesort_by_rating(self):
         self.recipe_list = self._mergesort_by_rating(self.recipe_list)
@@ -84,15 +86,16 @@ class CookBook:
         left_child = 2 * i + 1
         right_child = 2 * i + 2
 
-        if left_child < n and key_func(arr[i]) < key_func(arr[left_child]):
+        if left_child < n and (key_func(arr[i]) < key_func(arr[left_child]) or (key_func(arr[i]) == key_func(arr[left_child]) and arr[i].time == 'N/A')):
             largest = left_child
 
-        if right_child < n and key_func(arr[largest]) < key_func(arr[right_child]):
+        if right_child < n and (key_func(arr[largest]) < key_func(arr[right_child]) or (key_func(arr[largest]) == key_func(arr[right_child]) and arr[largest].time == 'N/A')):
             largest = right_child
 
         if largest != i:
             arr[i], arr[largest] = arr[largest], arr[i]
             self.heapify(arr, n, largest, key_func)
+
 
     def heap_sort_by_time(self):
         key_func = lambda recipe: (recipe.time_in_minutes(), recipe.time == 'N/A')

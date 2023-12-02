@@ -10,20 +10,26 @@ class Recipe:
 
     def time_in_minutes(self):
         if self.time == 'N/A':
-            return -1
+            return float('inf')
         total_minutes = 0
         time_components = self.time.split()
 
         for component in time_components:
-            if 'd' in component:
-                days = component.replace('d', '')
-                total_minutes += int(days) * 24 * 60 if days else 0
-            elif 'h' in component:
-                hours = component.replace('h', '')
-                total_minutes += int(hours) * 60 if hours else 0
-            elif 'm' in component:
-                minutes = component.replace('m', '')
-                total_minutes += int(minutes) if minutes else 0
+            if 'd' in component and len(time_components) == 6:
+                total_minutes = (int(time_components[0]) * 24 * 60) + (int(time_components[2]) * 60) + int(time_components[4])
+            elif 'd' in component and len(time_components) == 4:
+                if 'h' in component:
+                    total_minutes = (int(time_components[0]) * 24 * 60) + (int(time_components[2]) * 60)
+                else:
+                    total_minutes = (int(time_components[0]) * 24 * 60) + (int(time_components[2]))
+            elif 'd' in component and len(time_components) == 2:
+                total_minutes = (int(time_components[0]) * 24 * 60)
+            elif 'h' in component and len(time_components) == 4:
+                total_minutes += (int(time_components[0]) * 60) + int(time_components[2])
+            elif 'h' in component and len(time_components) == 2:
+                total_minutes += (int(time_components[0]) * 60)
+            elif 'm' in component and len(time_components) == 2:
+                total_minutes += int(time_components[0])
 
         return total_minutes
 

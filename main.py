@@ -13,7 +13,7 @@ print(f"Recipe for {dish}: {recipe}")
 
 # Sorting by time
 # cookbook.quicksort_by_time()
-cookbook.heap_sort_by_time()
+cookbook.quicksort_by_time()
 # After sorting
 # print("\nAfter sorting:")
 for recipe in range(0, 100):
