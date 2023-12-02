@@ -15,7 +15,8 @@ print(f"Recipe for {dish}: {recipe}")
 cookbook.quicksort_by_time()
 # After sorting
 # print("\nAfter sorting:")
-for recipe in range(5261, 5265):
+cookbook.recipe_list = cookbook.recipe_list[5261:] + cookbook.recipe_list[:5261]
+for recipe in range(0, 100):
     print(cookbook.recipe_list[recipe].name, cookbook.recipe_list[recipe].time)
     
 
