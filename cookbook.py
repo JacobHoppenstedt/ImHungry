@@ -31,7 +31,7 @@ class CookBook:
 
 # Example usage:
 csv_file_path = "your_cookbook.csv"  # Replace with the actual path to your CSV file
-cookbook = cookBook(csv_file_path)
+cookbook = CookBook(csv_file_path)
 
 # Example: Accessing recipes
 dish = "Spaghetti Bolognese"
