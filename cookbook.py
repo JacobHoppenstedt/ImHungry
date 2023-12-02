@@ -1,4 +1,4 @@
-import recipe.py
+from recipe import Recipe
 import csv
 
 class cookBook:

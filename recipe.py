@@ -16,7 +16,6 @@ def read_recipe_csv(file_path):
             time = recipe_info[1]
             rating = float(recipe_info[2])
 
-
             ingredients = recipe_info[3].split('//')
 
             recipe = Recipe(name, time, rating, ingredients)
