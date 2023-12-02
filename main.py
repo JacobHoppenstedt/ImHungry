@@ -30,6 +30,7 @@ def create_popup(item):
     layout = [
         [sg.Text(item, justification='center', size=(200, 1))],
         [sg.Listbox(cookbook.get_recipe(item), size=(50, 10))],
+        [sg.Text(cookbook.get_recipe_time(item), justification='center', size=(200, 1))],
         [sg.Button('OK')]
     ]
 

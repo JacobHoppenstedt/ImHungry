@@ -24,6 +24,11 @@ class CookBook:
             if recipe.name == dish_name:
                 return recipe.getIngredients()
         return "Recipe not found"
+    
+    def get_recipe_time(self, dish_name):
+        for recipe in self.recipe_list:
+            if recipe.name == dish_name:
+                return recipe.time
 
 
     # def quicksort_by_time(self):
