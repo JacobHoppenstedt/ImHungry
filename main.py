@@ -13,11 +13,10 @@ print(f"Recipe for {dish}: {recipe}")
 
 # Sorting by time
 # cookbook.quicksort_by_time()
-cookbook.quicksort_by_time()
 # After sorting
 # print("\nAfter sorting:")
 for recipe in range(0, 100):
-    print(cookbook.recipe_list[recipe].name, cookbook.recipe_list[recipe].time)
+    print(cookbook.recipe_list[recipe].name, cookbook.recipe_list[recipe].time_in_minutes)
     
 
 #populate recipe names into list
