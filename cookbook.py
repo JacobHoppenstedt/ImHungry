@@ -10,7 +10,7 @@ class cookBook:
 
     
 
-    def read_recipe_csv(file_path):
+def read_recipe_csv(file_path):
     recipes = []
     with open(file_path, 'r') as file:
         for line in file:
@@ -21,10 +21,16 @@ class cookBook:
             time = recipe_info[1]
             rating = float(recipe_info[2])
 
-
             ingredients = recipe_info[3].split('//')
 
-            recipe = Recipe(name, time, rating, ingredients)
+            recipe_dict = {
+                'name': name,
+                'time': time,
+                'rating': rating,
+                'ingredients': ingredients
+            }
+
+            recipe = Recipe(**recipe_dict)
             recipes.append(recipe)
 
     return recipes
