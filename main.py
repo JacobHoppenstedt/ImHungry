@@ -10,6 +10,9 @@ dish = "Golden Crescent Rolls"
 recipe = cookbook.get_recipe(dish)
 print(f"Recipe for {dish}: {recipe}")
 
+print("\nBefore sorting:")
+for recipe in range(0, 100):
+    print(cookbook.recipe_list[recipe].name, cookbook.recipe_list[recipe].time)
 # Sorting by time
 cookbook.quicksort_by_time()
 
