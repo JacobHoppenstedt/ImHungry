@@ -19,6 +19,9 @@ print("\nAfter sorting:")
 for recipe in cookbook.recipe_list:
     print(recipe.name, recipe.time)
 
+for recipe in range(0, 100):
+    print(cookbook.recipe_list[recipe].name, cookbook.recipe_list[recipe].time)
+
 def create_popup(item):
     # Define the layout of the popup window
     layout = [
@@ -66,3 +69,4 @@ while True:
         create_popup(selected_item)
 
 window.close()
+

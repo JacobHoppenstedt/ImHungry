@@ -9,10 +9,8 @@ class Recipe:
         return self.ingredients
 
     def time_in_minutes(self):
-        # return time in minutes for sorting
         if self.time == 'N/A':
-            return float(10000000)
-
+            return float('inf')
         total_minutes = 0
         time_components = self.time.split()
 
@@ -26,8 +24,5 @@ class Recipe:
             elif 'm' in component:
                 minutes = component.replace('m', '')
                 total_minutes += int(minutes) if minutes else 0
-            else:
-                # Assume it's only minutes if no unit is specified
-                total_minutes += int(component) if component else 0
 
         return total_minutes
