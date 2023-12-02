@@ -43,10 +43,40 @@ class CookBook:
         greater = [recipe for recipe in recipes[1:] if recipe.time_in_minutes() > pivot_time]
         na_recipes = [recipe for recipe in recipes[1:] if recipe.time_in_minutes() == float('inf')]
 
-        # Recursively apply quicksort to less and greater portions
-        sorted_recipes = self._quicksort_by_time(less) + [pivot_recipe] + equal + self._quicksort_by_time(greater) + na_recipes
-        return sorted_recipes
+        sorted_recipes = self._quicksort_by_time(less) + equal + self._quicksort_by_time(greater) + na_recipes
+        return sorted_recipes[:pivot_index] + [recipes[pivot_index]] + sorted_recipes[pivot_index + 1:]
 
+    def mergesort_by_rating(self):
+        self.recipe_list = self._mergesort_by_rating(self.recipe_list)
+
+    def _mergesort_by_rating(self, recipes):
+        if len(recipes) <= 1:
+            return recipes
+
+        mid = len(recipes) // 2
+        left_half = recipes[:mid]
+        right_half = recipes[mid:]
+
+        left_half = self._mergesort_by_rating(left_half)
+        right_half = self._mergesort_by_rating(right_half)
+
+        return self._merge_by_rating(left_half, right_half)
+
+    def _merge_by_rating(self, left, right):
+        result = []
+        i = j = 0
+
+        while i < len(left) and j < len(right):
+            if left[i].rating <= right[j].rating:
+                result.append(left[i])
+                i += 1
+            else:
+                result.append(right[j])
+                j += 1
+
+        result.extend(left[i:])
+        result.extend(right[j:])
+        return result
     def heapify(self, arr, n, i, key_func):
         largest = i
         left_child = 2 * i + 1
