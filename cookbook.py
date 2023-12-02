@@ -45,7 +45,7 @@ class CookBook:
         less = [recipe for i, recipe in enumerate(recipes) if i != pivot_index and recipe.time_in_minutes() < pivot_time]
         equal = [recipe for i, recipe in enumerate(recipes) if i != pivot_index and recipe.time_in_minutes() == pivot_time]
         greater = [recipe for i, recipe in enumerate(recipes) if i != pivot_index and recipe.time_in_minutes() > pivot_time]
-        na_recipes = [recipe for i, recipe in enumerate(recipes) if i != pivot_index and recipe.time == 'N/A']
+        na_recipes = [recipe for i, recipe in enumerate(recipes) if i != pivot_index and recipe.time_in_minutes() == 10000000]
 
         sorted_recipes = self._quicksort_by_time(less) + equal + greater + na_recipes
         return sorted_recipes[:pivot_index] + [recipes[pivot_index]] + sorted_recipes[pivot_index + 1:]
