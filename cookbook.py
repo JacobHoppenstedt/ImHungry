@@ -49,6 +49,3 @@ class CookBook:
 
         sorted_recipes = self._quicksort_by_time(less) + equal + greater + na_recipes
         return sorted_recipes[:pivot_index] + [recipes[pivot_index]] + sorted_recipes[pivot_index + 1:]
-
-
-
