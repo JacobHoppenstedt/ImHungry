@@ -22,7 +22,7 @@ class CookBook:
     def get_recipe(self, dish_name):
         for recipe in self.recipe_list:
             if recipe.name == dish_name:
-                return recipe
+                return recipe.getIngredients()
         return "Recipe not found"
 
 
