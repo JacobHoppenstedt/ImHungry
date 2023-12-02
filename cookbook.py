@@ -57,7 +57,7 @@ class CookBook:
     def mergesort_by_rating(self):
         self.recipe_list = self._mergesort_by_rating(self.recipe_list)
 
-    def _mergesort_by_rating(self, recipes):
+    def _mergesort_by_rating(self, recipes):        
         if len(recipes) <= 1:
             return recipes
 
