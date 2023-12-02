@@ -19,19 +19,21 @@ cookbook.heap_sort_by_time()
 for recipe in range(0, 100):
     print(cookbook.recipe_list[recipe].name, cookbook.recipe_list[recipe].time)
     
-names = []
-for recipe in range(0, 10000):
-    names.append(cookbook.recipe_list[recipe].name)
 
+#populate recipe names into list
+meal_names = []
+for recipe in range(0, 10000):
+    meal_names.append(cookbook.recipe_list[recipe].name)
+
+#shows selected recipe/ingredients/photo of the meal
 def create_popup(item):
-    # Define the layout of the popup window
     layout = [
         [sg.Text(item, justification='center', size=(200, 1))],
+        [sg.Listbox(cookbook.get_recipe(item), size=(50, 10))],
         [sg.Button('OK')]
     ]
 
-    # Create the popup window
-    window = sg.Window('Popup', layout, size=(200, 200), finalize=True)
+    window = sg.Window(item, layout, size=(400, 400), finalize=True)
 
     # Event loop for the popup window
     while True:
@@ -47,7 +49,7 @@ def create_popup(item):
 # Define the window's contents
 layout = [[sg.Text("Search for a meal...")],
           [sg.Input(do_not_clear=True, size=(20,1),enable_events=True, key='_INPUT_')],
-          [sg.Listbox(names, size=(200,200), enable_events=True, key='_LIST_')],
+          [sg.Listbox(meal_names, size=(200,200), enable_events=True, key='_LIST_')],
           [sg.Button('Ok'), sg.Button('Quit')]]
 
 
@@ -58,10 +60,10 @@ while True:
         break
     if values['_INPUT_'] != '':
         search = values['_INPUT_']
-        new_values = [x for x in names if search in x]  # do the filtering
+        new_values = [x for x in meal_names if search.lower() in x.lower()]  # do the filtering  
         window.Element('_LIST_').Update(new_values)
     else:
-        window.Element('_LIST_').Update(names)          # display original unfiltered list
+        window.Element('_LIST_').Update(meal_names)          # display original unfiltered list
     if event == '_LIST_' and len(values['_LIST_']):     # if a list item is chosen
         selected_item = values['_LIST_'][0]
         create_popup(selected_item)
