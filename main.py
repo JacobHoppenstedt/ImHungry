@@ -19,8 +19,9 @@ print("\nAfter sorting:")
 for recipe in cookbook.recipe_list:
     print(recipe.name, recipe.time)
 
-for recipe in range(0, 100):
-    print(cookbook.recipe_list[recipe].name, cookbook.recipe_list[recipe].time)
+names = []
+for recipe in range(0, 10000):
+    names.append(cookbook.recipe_list[recipe].name)
 
 def create_popup(item):
     # Define the layout of the popup window
@@ -42,9 +43,6 @@ def create_popup(item):
     window.close()
 
 
-names = ['Roberta', 'Kylie', 'Jenny', 'Helen',
-        'Andrea', 'Meredith','Deborah','Pauline',
-        'Belinda', 'Wendy']
 
 # Define the window's contents
 layout = [[sg.Text("Search for a meal...")],
