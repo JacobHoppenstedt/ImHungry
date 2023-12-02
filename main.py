@@ -19,9 +19,9 @@ print("\nAfter sorting:")
 for recipe in cookbook.recipe_list:
     print(recipe.name, recipe.time)
 
-names = []
+meal_names = []
 for recipe in range(0, 10000):
-    names.append(cookbook.recipe_list[recipe].name)
+    meal_names.append(cookbook.recipe_list[recipe].name)
 
 def create_popup(item):
     # Define the layout of the popup window
@@ -47,7 +47,7 @@ def create_popup(item):
 # Define the window's contents
 layout = [[sg.Text("Search for a meal...")],
           [sg.Input(do_not_clear=True, size=(20,1),enable_events=True, key='_INPUT_')],
-          [sg.Listbox(names, size=(200,200), enable_events=True, key='_LIST_')],
+          [sg.Listbox(meal_names, size=(200,200), enable_events=True, key='_LIST_')],
           [sg.Button('Ok'), sg.Button('Quit')]]
 
 
@@ -58,10 +58,10 @@ while True:
         break
     if values['_INPUT_'] != '':
         search = values['_INPUT_']
-        new_values = [x for x in names if search in x]  # do the filtering
+        new_values = [x for x in meal_names if search.lower() in x.lower()]  # do the filtering  
         window.Element('_LIST_').Update(new_values)
     else:
-        window.Element('_LIST_').Update(names)          # display original unfiltered list
+        window.Element('_LIST_').Update(meal_names)          # display original unfiltered list
     if event == '_LIST_' and len(values['_LIST_']):     # if a list item is chosen
         selected_item = values['_LIST_'][0]
         create_popup(selected_item)
