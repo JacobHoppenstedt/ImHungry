@@ -11,7 +11,7 @@ class Recipe:
     def time_in_minutes(self):
         # return time in minutes for sorting
         if self.time == 'N/A':
-            return float('inf')  # or any large value to place 'N/A' at the end
+            return float(10000000)
 
         total_minutes = 0
         time_components = self.time.split()
