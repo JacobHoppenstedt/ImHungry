@@ -11,8 +11,8 @@ class CookBook:
             reader = csv.reader(file)
             for row in reader:
                 name, time, rating, *ingredients = row
-                ingredients_string = ",".join(ingredients)
-                recipe = Recipe(name, time, rating, ingredients_string)
+                ingredients_list = [ingredient.strip() for ingredient in " ".join(ingredients).split('//')]
+                recipe = Recipe(name, time, rating, ingredients_list)
                 self.add_entry(recipe)
 
 
