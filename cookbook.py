@@ -26,11 +26,10 @@ class CookBook:
                 return recipe
         return "Recipe not found"
 
-        #hi
 
 
 # Example usage:
-csv_file_path = "your_cookbook.csv"  # Replace with the actual path to your CSV file
+csv_file_path = "your_cookbook.csv"
 cookbook = CookBook(csv_file_path)
 
 # Example: Accessing recipes
