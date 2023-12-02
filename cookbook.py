@@ -13,9 +13,10 @@ def load_from_csv(self, csv_file):
             if len(row) == 4: 
                 name, time, rating, ingredient_str = row
 
-                # Remove commas from duration
+                # Remove commas from name, time, rating
                 time = time.replace(',', '')
-
+                rating = rating.replace(',', '')
+                name = name.replace(',', '')
                 # Split ingredients by '//'
                 ingredients = [ingredient.strip() for ingredient in ingredient_str.split('//')]
 
