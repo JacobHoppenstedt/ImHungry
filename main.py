@@ -12,12 +12,12 @@ recipe = cookbook.get_recipe(dish)
 print(f"Recipe for {dish}: {recipe}")
 
 # Sorting by time
-cookbook.quicksort_by_time()
+# cookbook.quicksort_by_time()
 
 # After sorting
-print("\nAfter sorting:")
-for recipe in cookbook.recipe_list:
-    print(recipe.name, recipe.time)
+# print("\nAfter sorting:")
+# for recipe in cookbook.recipe_list:
+#     print(recipe.name, recipe.time)
 
 names = []
 for recipe in range(0, 10000):
