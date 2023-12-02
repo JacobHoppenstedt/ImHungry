@@ -13,12 +13,12 @@ print(f"Recipe for {dish}: {recipe}")
 
 # Sorting by time
 # cookbook.quicksort_by_time()
-
+cookbook.heap_sort_by_time()
 # After sorting
 # print("\nAfter sorting:")
-# for recipe in cookbook.recipe_list:
-#     print(recipe.name, recipe.time)
-
+for recipe in range(0, 100):
+    print(cookbook.recipe_list[recipe].name, cookbook.recipe_list[recipe].time)
+    
 names = []
 for recipe in range(0, 10000):
     names.append(cookbook.recipe_list[recipe].name)
@@ -67,3 +67,4 @@ while True:
         create_popup(selected_item)
 
 window.close()
+
