@@ -6,20 +6,14 @@ class CookBook:
         self.recipe_list = []
         self.load_from_csv(csv_file)
 
-def load_from_csv(self, csv_file):
-    with open(csv_file, newline='', encoding='utf-8') as file:
-        reader = csv.reader(file)
-        for row in reader:
-            if len(row) == 4: 
-                name, time, rating, ingredient_str = row
-
-                # Split ingredients by '//'
-                ingredients = [ingredient.strip() for ingredient in ingredient_str.split('//')]
-
-                recipe = Recipe(name, time, rating, ingredients)
+    def load_from_csv(self, csv_file):
+        with open(csv_file, newline='', encoding='utf-8') as file:
+            reader = csv.reader(file)
+            for row in reader:
+                name, time, rating, *ingredients = row
+                ingredients_string = ",".join(ingredients)
+                recipe = Recipe(name, time, rating, ingredients_string)
                 self.add_entry(recipe)
-            else:
-                print(f"Skipping invalid entry: {row}")
 
 
     def add_entry(self, recipe):
@@ -28,7 +22,7 @@ def load_from_csv(self, csv_file):
     def get_recipe(self, dish_name):
         for recipe in self.recipe_list:
             if recipe.name == dish_name:
-                return recipe
+                return recipe.getIngredients()
         return "Recipe not found"
 
 

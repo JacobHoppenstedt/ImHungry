@@ -5,6 +5,9 @@ class Recipe:
         self.rating = rating
         self.ingredients = ingredients
 
+    def getIngredients(self):
+        return self.ingredients
+
 def read_recipe_csv(file_path):
     recipes = []
     with open(file_path, 'r') as file:
