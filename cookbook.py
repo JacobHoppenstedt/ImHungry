@@ -1,9 +1,9 @@
 import recipe.py
 import csv
 
-class cookBook:
+class CookBook:
     def __init__(self, csv_file):
-        self.recipe_hash_table = {}
+        self.recipe_list = []
         self.load_from_csv(csv_file)
 
     def load_from_csv(self, csv_file):
@@ -17,11 +17,14 @@ class cookBook:
                 else:
                     print(f"Skipping invalid entry: {row}")
 
-    def add_entry(self, dish_name, recipe):
-        self.recipe_hash_table[dish_name] = recipe
+    def add_entry(self, recipe):
+        self.recipe_list.append(recipe)
 
     def get_recipe(self, dish_name):
-        return self.recipe_hash_table.get(dish_name, "Recipe not found")
+        for recipe in self.recipe_list:
+            if recipe.name == dish_name:
+                return recipe
+        return "Recipe not found"
 
 
 # Example usage:
