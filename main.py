@@ -13,12 +13,8 @@ print(f"Recipe for {dish}: {recipe}")
 
 # Sorting by time
 cookbook.quicksort_by_time()
-# After sorting
-# print("\nAfter sorting:")
+# puts NA recipes to end
 cookbook.recipe_list = cookbook.recipe_list[5262:] + cookbook.recipe_list[:5262]
-for recipe in range(9500, 10027):
-    print(cookbook.recipe_list[recipe].name, cookbook.recipe_list[recipe].time)
-    
 
 #populate recipe names into list
 meal_names = []
