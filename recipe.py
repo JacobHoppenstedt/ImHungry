@@ -4,6 +4,7 @@ class Recipe:
         self.time = time
         self.rating = rating
         self.ingredients = ingredients
+        self.time_in_minutes = 0
 
     def getIngredients(self):
         return self.ingredients
@@ -16,20 +17,21 @@ class Recipe:
 
         for component in time_components:
             if 'd' in component and len(time_components) == 6:
-                total_minutes = (int(time_components[0]) * 24 * 60) + (int(time_components[2]) * 60) + int(time_components[4])
+                time_in_minutes = (int(time_components[0]) * 24 * 60) + (int(time_components[2]) * 60) + int(time_components[4])
             elif 'd' in component and len(time_components) == 4:
                 if 'h' in component:
-                    total_minutes = (int(time_components[0]) * 24 * 60) + (int(time_components[2]) * 60)
+                    time_in_minutes = (int(time_components[0]) * 24 * 60) + (int(time_components[2]) * 60)
                 else:
-                    total_minutes = (int(time_components[0]) * 24 * 60) + (int(time_components[2]))
+                    time_in_minutes = (int(time_components[0]) * 24 * 60) + (int(time_components[2]))
             elif 'd' in component and len(time_components) == 2:
-                total_minutes = (int(time_components[0]) * 24 * 60)
+                time_in_minutes = (int(time_components[0]) * 24 * 60)
             elif 'h' in component and len(time_components) == 4:
-                total_minutes += (int(time_components[0]) * 60) + int(time_components[2])
+                time_in_minutes += (int(time_components[0]) * 60) + int(time_components[2])
             elif 'h' in component and len(time_components) == 2:
-                total_minutes += (int(time_components[0]) * 60)
+                time_in_minutes += (int(time_components[0]) * 60)
             elif 'm' in component and len(time_components) == 2:
-                total_minutes += int(time_components[0])
+                time_in_minutes += int(time_components[0])
 
-        return total_minutes
+        total_time = time_in_minutes
+        return total_time
 
