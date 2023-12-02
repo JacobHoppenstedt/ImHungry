@@ -47,3 +47,31 @@ class CookBook:
         sorted_recipes = self._quicksort_by_time(less) + [pivot_recipe] + equal + self._quicksort_by_time(greater) + na_recipes
         return sorted_recipes
 
+    def heapify(self, arr, n, i, key_func):
+        largest = i
+        left_child = 2 * i + 1
+        right_child = 2 * i + 2
+
+        if left_child < n and key_func(arr[i]) < key_func(arr[left_child]):
+            largest = left_child
+
+        if right_child < n and key_func(arr[largest]) < key_func(arr[right_child]):
+            largest = right_child
+
+        if largest != i:
+            arr[i], arr[largest] = arr[largest], arr[i]
+            self.heapify(arr, n, largest, key_func)
+
+    def heap_sort_by_time(self):
+        key_func = lambda recipe: (recipe.time_in_minutes(), recipe.time == 'N/A')
+
+        n = len(self.recipe_list)
+
+        # Build a max heap
+        for i in range(n // 2 - 1, -1, -1):
+            self.heapify(self.recipe_list, n, i, key_func)
+
+        # Extract elements one by one
+        for i in range(n - 1, 0, -1):
+            self.recipe_list[i], self.recipe_list[0] = self.recipe_list[0], self.recipe_list[i]
+            self.heapify(self.recipe_list, i, 0, key_func)

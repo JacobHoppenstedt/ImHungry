@@ -10,7 +10,7 @@ class Recipe:
 
     def time_in_minutes(self):
         if self.time == 'N/A':
-            return float('inf')
+            return -1
         total_minutes = 0
         time_components = self.time.split()
 
@@ -26,3 +26,4 @@ class Recipe:
                 total_minutes += int(minutes) if minutes else 0
 
         return total_minutes
+
