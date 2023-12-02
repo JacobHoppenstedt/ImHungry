@@ -50,6 +50,7 @@ class CookBook:
 
         # Recursively apply quicksort to less and greater portions
         sorted_recipes = self._quicksort_by_time(less) + [pivot_recipe] + equal + self._quicksort_by_time(greater) + na_recipes
+
         return sorted_recipes
 
 
