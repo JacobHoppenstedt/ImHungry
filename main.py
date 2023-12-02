@@ -19,19 +19,21 @@ print(f"Recipe for {dish}: {recipe}")
 # for recipe in cookbook.recipe_list:
 #     print(recipe.name, recipe.time)
 
+
+#populate recipe names into list
 meal_names = []
 for recipe in range(0, 10000):
     meal_names.append(cookbook.recipe_list[recipe].name)
 
+#shows selected recipe/ingredients/photo of the meal
 def create_popup(item):
-    # Define the layout of the popup window
     layout = [
         [sg.Text(item, justification='center', size=(200, 1))],
+        [sg.Listbox(cookbook.get_recipe(item), size=(50, 10))],
         [sg.Button('OK')]
     ]
 
-    # Create the popup window
-    window = sg.Window('Popup', layout, size=(200, 200), finalize=True)
+    window = sg.Window(item, layout, size=(400, 400), finalize=True)
 
     # Event loop for the popup window
     while True:
