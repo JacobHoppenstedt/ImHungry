@@ -9,12 +9,11 @@ class cookBook:
     def load_from_csv(self, csv_file):
         with open(csv_file, newline='', encoding='utf-8') as file:
             reader = csv.reader(file)
-            header = next(reader)  # Assuming the first row contains column headers
-
             for row in reader:
-                if len(row) == len(header):  # Check if the number of columns matches the header
-                    dish_name, recipe = row
-                    self.add_entry(dish_name, recipe)
+                if len(row) == 4:  # Assuming there are four columns in the CSV
+                    name, duration, rating, ingredients = row
+                    recipe = Recipe(name, duration, rating, ingredients)
+                    self.add_entry(recipe)
                 else:
                     print(f"Skipping invalid entry: {row}")
 
