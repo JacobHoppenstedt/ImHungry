@@ -28,15 +28,33 @@ def create_popup(item, cookbook, file_urls):
     font = ('Arial', 16, 'underline')
     print(f"Debug: Received file_urls in create_popup: {file_urls}")
     layout = [
-        [sg.Text(item, justification='center', size=(400, 2))],
-        [sg.Listbox(cookbook.get_recipe(item), size=(100, 20))],
-        [sg.Text(f'Time to cook: {cookbook.get_recipe_time(item)}', justification='center', size=(400, 2))],
-        [sg.Text('Link to Recipe', tooltip=url, enable_events=True, font =font, key= '_URL_')],
-        [sg.Image(key='_RECIPE_IMAGE_', size=(200, 150), pad=((125, 25), (20, 20)))],
-        [sg.Image(key='_RATING_IMAGE_', size=(200, 150), pad=((125, 25), (20, 20)))],
-
-        [sg.Button('OK')]
+        [sg.Text(item, font=('Arial', 18, 'italic'), justification='center', size=(400, 2), pad=((0, 0), (10, 20)))],
+        [sg.Listbox(cookbook.get_recipe(item), size=(100, 20), pad=((0, 0), (0, 20)))],
+        [
+            sg.Text(f'Time to cook: {cookbook.get_recipe_time(item)}', font=('Arial', 14), justification='center', size=(400, 2), pad=((0, 0), (0, 20))),
+        ],
+        [
+            sg.Column(
+                layout=[
+                    [sg.Text('Link to Recipe', tooltip=url, enable_events=True, font=('Arial', 16, 'underline', 'bold'), key='_URL_')],
+                    [sg.Image(key='_RATING_IMAGE_', size=(200, 150), pad=((0, 0), (30, 0)))],  # Adjusted the padding here
+                ],
+                justification='center',
+                element_justification='center',
+                pad=((50, 50), 0)  # Padding between columns
+            ),
+            sg.Column(
+                layout=[
+                    [sg.Image(key='_RECIPE_IMAGE_', size=(200, 150))],
+                ],
+                justification='center',
+                element_justification='center',
+                pad=((50, 50), 0)  # Padding between columns
+            ),
+        ],
     ]
+
+
 
     window = sg.Window(item, layout, size=(800, 800), finalize=True)
     recipe_rating = float(cookbook.get_recipe_rating(item))
