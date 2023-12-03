@@ -4,8 +4,7 @@ import PySimpleGUI as sg
 from PIL import Image, ImageTk
 from io import BytesIO
 import requests
-import bs4
-import requests
+import webbrowser
 import bs4
 from icrawler.builtin import GoogleImageCrawler, GoogleFeeder, GoogleParser
 from customlinkprinter import CustomLinkPrinter
@@ -26,13 +25,13 @@ rating_images = {
 def create_popup(item, cookbook, file_urls):
     text = item.replace(' ', '+')
     url = 'https://google.com/search?q=' + text + '+recipe'
-    font = ()
+    font = ('Arial', 16, 'underline')
     print(f"Debug: Received file_urls in create_popup: {file_urls}")
     layout = [
         [sg.Text(item, justification='center', size=(400, 2))],
         [sg.Listbox(cookbook.get_recipe(item), size=(100, 20))],
-        [sg.Text(cookbook.get_recipe_time(item), justification='center', size=(400, 2))],
-
+        [sg.Text(f'Time to cook: {cookbook.get_recipe_time(item)}', justification='center', size=(400, 2))],
+        [sg.Text('Link to Recipe', tooltip=url, enable_events=True, font =font, key= '_URL_')],
         [sg.Image(key='_RECIPE_IMAGE_', size=(200, 150), pad=((125, 25), (20, 20)))],
         [sg.Image(key='_RATING_IMAGE_', size=(200, 150), pad=((125, 25), (20, 20)))],
 
@@ -76,6 +75,8 @@ def create_popup(item, cookbook, file_urls):
 
         if event in (sg.WIN_CLOSED, 'OK'):
             break
+        if event == '_URL_':
+            webbrowser.open(url)
 
     window.close()
 
