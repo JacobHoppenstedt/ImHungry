@@ -38,6 +38,9 @@ class CookBook:
             if recipe.name == dish_name:
                 return recipe.time
 
+    def search_recipes_by_ingredients(self, query_ingredients):
+        recipes_after_search = [recipe for recipe in self.recipe_list if all(ingredient in recipe.ingredients for ingredient in query_ingredients)]
+        return recipes_after_search
 
     def quicksort_by_time(self):
             self.recipe_list = self._quicksort_by_time(self.recipe_list)
