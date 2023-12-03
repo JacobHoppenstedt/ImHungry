@@ -18,6 +18,7 @@ rating_images = {
     (0.5, 1.0): "images/Star_rating_1_of_5.png",
     (0.0, 0.5): "images/Star_rating_0.5_of_5.png",
 }
+
 def create_popup(item, cookbook):
     layout = [
         [sg.Text(item, justification='center', size=(400, 2))],
@@ -177,13 +178,14 @@ params = {
     'file_idx_offset': 0,
     'overwrite': False,
     }
+sorted = False
 while True:
     
     startup_event, startup_values = startup_window.read()
-    # google_crawler = GoogleImageCrawler(**init_params)
-    # google_crawler.downloader.file_urls = []
-    # google_crawler.crawl(keyword=keyword, **params)
-    # file_urls =  google_crawler.downloader.file_urls
+    google_crawler = GoogleImageCrawler(**init_params)
+    google_crawler.downloader.file_urls = []
+    google_crawler.crawl(keyword=keyword, **params)
+    file_urls =  google_crawler.downloader.file_urls
 
     if startup_event == sg.WIN_CLOSED or startup_event == 'Quit':
         break
