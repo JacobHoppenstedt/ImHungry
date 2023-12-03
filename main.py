@@ -11,6 +11,14 @@ dish = "Golden Crescent Rolls"
 recipe = cookbook.get_recipe(dish)
 print(f"Recipe for {dish}: {recipe}")
 
+ingredients = "onion celery"
+recipes_with_ingredients = cookbook.search_recipes_by_ingredients(ingredients.split())
+print(recipes_with_ingredients)
+
+print("\nRecipes After Search:")
+for recipe in recipes_with_ingredients:
+    print(f"{recipe.name}: {recipe.ingredients}")
+
 # Sorting by time
 cookbook.quicksort_by_time()
 # puts NA recipes to end
