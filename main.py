@@ -5,6 +5,8 @@ from PIL import Image, ImageTk
 from io import BytesIO
 import requests
 import bs4
+import requests
+import bs4
 from icrawler.builtin import GoogleImageCrawler, GoogleFeeder, GoogleParser
 from customlinkprinter import CustomLinkPrinter
 import requests
@@ -134,10 +136,10 @@ def open_search_type(type):
 
             if event == '_LIST_' and len(values['_LIST_']):
                 selected_item = values['_LIST_'][0]
-                create_popup(selected_item, cookbook, crawl_image(selected_item + 'food'))
+                create_popup(selected_item, cookbook, crawl_image(selected_item + 'food or drink'))
             if event == '_INGREDIENT_LIST_' and len(values['_INGREDIENT_LIST_']):
                 selected_item = values['_INGREDIENT_LIST_'][0]
-                create_popup(selected_item, cookbook, crawl_image(selected_item + 'food'))
+                create_popup(selected_item, cookbook, crawl_image(selected_item + 'food or drink'))
             if event == 'Back':
                 break
 
