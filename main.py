@@ -70,21 +70,23 @@ def open_search_type(type):
 
             if event in (sg.WIN_CLOSED, 'OK'):
                 break
-            if current_values['_INPUT_'] != '':
-                search_by_name(current_values['_INPUT_'], cookbook, tab_window)
-                sorted = False
-            elif current_values['_INPUT_'] == '' and sorted != True:
-                tab_window.Element('_LIST_').Update(meal_names)
-            if current_event == '_SORT_BY_RATING_':
+            if values['_INPUT_'] != '':
+                search_by_name(values['_INPUT_'], cookbook, tab_window)
+            elif values['_INPUT_'] == '':
+                if sorted:
+                    sort_by_rating(cookbook, tab_window, layout)
+                else:
+                    tab_window.Element('_LIST_').Update(meal_names)
+            if event == '_SORT_BY_RATING_':
                 sort_by_rating(cookbook, tab_window, layout)
                 sorted = True
-            if current_event == '_LIST_' and len(current_values['_LIST_']):
-                selected_item = current_values['_LIST_'][0]
+            if event == '_LIST_' and len(values['_LIST_']):
+                selected_item = values['_LIST_'][0]
                 create_popup(selected_item, cookbook)
-            if current_event == '_INGREDIENT_LIST_' and len(current_values['_INGREDIENT_LIST_']):
-                selected_item = current_values['_INGREDIENT_LIST_'][0]
+            if event == '_INGREDIENT_LIST_' and len(values['_INGREDIENT_LIST_']):
+                selected_item = values['_INGREDIENT_LIST_'][0]
                 create_popup(selected_item, cookbook)
-            if current_event == 'Back':
+            if event == 'Back':
                 break
         tab_window.close()
     elif type=='Ingredients':
@@ -99,18 +101,18 @@ def open_search_type(type):
 
             if event in (sg.WIN_CLOSED, 'OK'):
                 break
-            if current_values['_INGREDIENT_INPUT_'] != '':
-                search_by_ingredients(current_values['_INGREDIENT_INPUT_'], cookbook, tab_window)
+            if values['_INGREDIENT_INPUT_'] != '':
+                search_by_ingredients(values['_INGREDIENT_INPUT_'], cookbook, tab_window)
             else:
                 tab_window.Element('_INGREDIENT_LIST_').Update([])
 
-            if current_event == '_LIST_' and len(current_values['_LIST_']):
-                selected_item = current_values['_LIST_'][0]
+            if event == '_LIST_' and len(values['_LIST_']):
+                selected_item = values['_LIST_'][0]
                 create_popup(selected_item, cookbook)
-            if current_event == '_INGREDIENT_LIST_' and len(current_values['_INGREDIENT_LIST_']):
-                selected_item = current_values['_INGREDIENT_LIST_'][0]
+            if event == '_INGREDIENT_LIST_' and len(values['_INGREDIENT_LIST_']):
+                selected_item = values['_INGREDIENT_LIST_'][0]
                 create_popup(selected_item, cookbook)
-            if current_event == 'Back':
+            if event == 'Back':
                 break
 
         tab_window.close()
