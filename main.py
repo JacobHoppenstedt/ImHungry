@@ -67,6 +67,7 @@ def search_by_ingredients(search_ingredient, cookbook, window):
 def sort_by_rating(cookbook, window, current_tab_layout):
     cookbook.mergesort_by_rating()
     updated_meal_names = [recipe.name for recipe in cookbook.recipe_list]
+    updated_meal_names.reverse()
     window.Element('_LIST_').Update(updated_meal_names)
 
 # Initialize cookbook...
