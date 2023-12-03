@@ -18,6 +18,7 @@ rating_images = {
     (0.5, 1.0): "images/Star_rating_1_of_5.png",
     (0.0, 0.5): "images/Star_rating_0.5_of_5.png",
 }
+
 def create_popup(item, cookbook):
     layout = [
         [sg.Text(item, justification='center', size=(400, 2))],
@@ -134,13 +135,14 @@ params = {
     'file_idx_offset': 0,
     'overwrite': False,
     }
+sorted = False
 while True:
     
     startup_event, startup_values = startup_window.read()
-    # google_crawler = GoogleImageCrawler(**init_params)
-    # google_crawler.downloader.file_urls = []
-    # google_crawler.crawl(keyword=keyword, **params)
-    # file_urls =  google_crawler.downloader.file_urls
+    google_crawler = GoogleImageCrawler(**init_params)
+    google_crawler.downloader.file_urls = []
+    google_crawler.crawl(keyword=keyword, **params)
+    file_urls =  google_crawler.downloader.file_urls
 
     if startup_event == sg.WIN_CLOSED or startup_event == 'Quit':
         break
@@ -158,15 +160,15 @@ while True:
 
         if current_event == sg.WINDOW_CLOSED or current_event == 'Quit':
             break
-        
-
 
         if current_tab_layout is name_tab_layout:
             if current_values['_INPUT_'] != '':
                 search_by_name(current_values['_INPUT_'], cookbook, current_tab_window)
-                sorted = False
-            elif current_values['_INPUT_'] == '' and sorted != True:
-                current_tab_window.Element('_LIST_').Update(meal_names)
+            elif current_values['_INPUT_'] == '':
+                if sorted:
+                    sort_by_rating(cookbook, current_tab_window, current_tab_layout)
+                else:
+                    current_tab_window.Element('_LIST_').Update(meal_names)
             if current_event == '_SORT_BY_RATING_':
                 sort_by_rating(cookbook, current_tab_window, current_tab_layout)
                 sorted = True
