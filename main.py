@@ -81,7 +81,8 @@ def create_popup(item, cookbook, file_urls):
     window.close()
 
 def open_search_type(type):
-    sorted = False
+    sorted_rating = False
+    sorted_time = False
     if type=='Meal Name':
         layout = [
             [sg.Text("Search for a meal...", size=(400, 1))],
@@ -99,16 +100,21 @@ def open_search_type(type):
             if values['_INPUT_'] != '':
                 search_by_name(values['_INPUT_'], cookbook, tab_window)
             elif values['_INPUT_'] == '':
-                if sorted:
+                if sorted_rating:
                     sort_by_rating(cookbook, tab_window, layout)
+                else:
+                    tab_window.Element('_LIST_').Update(meal_names)
+                if sorted_time:
+                    sort_by_time(cookbook, tab_window, layout)
                 else:
                     tab_window.Element('_LIST_').Update(meal_names)
             if event == '_SORT_BY_RATING_':
                 sort_by_rating(cookbook, tab_window, layout)
-                sorted = True
+                sorted_rating = True
             if event == '_SORT_BY_TIME_':
                 sort_by_time(cookbook, tab_window, layout)
-                sorted = True
+                sorted_time = True
+
             if event == '_LIST_' and len(values['_LIST_']):
                 selected_item = values['_LIST_'][0]
                 create_popup(selected_item, cookbook, crawl_image(selected_item + 'food or drink'))
@@ -165,6 +171,7 @@ def sort_by_rating(cookbook, window, current_tab_layout):
 
 def sort_by_time(cookbook, window, current_tab_layout):
     cookbook.quicksort_by_time()
+    cookbook.recipe_list = cookbook.recipe_list[5262:] + cookbook.recipe_list[:5262]
     updated_meal_names = [recipe.name for recipe in cookbook.recipe_list]
     window.Element('_LIST_').Update(updated_meal_names)
 
@@ -195,10 +202,6 @@ def crawl_image(recipe_name):
 csv_file_path = "food_recipes.csv" 
 cookbook = CookBook(csv_file_path)
 
-# Sorting by time
-# `cookbook.quicksort_by_time()
-# puts NA recipes to end
-cookbook.recipe_list = cookbook.recipe_list[5262:] + cookbook.recipe_list[:5262]
 # Populate recipe names into list
 meal_names = [recipe.name for recipe in cookbook.recipe_list]
 
