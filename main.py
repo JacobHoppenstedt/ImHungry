@@ -87,7 +87,7 @@ def open_search_type(type):
             [sg.Text("Search for a meal...", size=(400, 1))],
             [sg.Input(do_not_clear=True, size=(40, 2), enable_events=True, key='_INPUT_')],
             [sg.Button('Sort by Rating', size=(20, 2), key='_SORT_BY_RATING_')],
-            [sg.Button('Sort by Time', size=(20, 2), key='_SORT_BY_RATING_')],
+            [sg.Button('Sort by Time', size=(20, 2), key='_SORT_BY_TIME_')],
             [sg.Listbox(meal_names, size=(400, 400), enable_events=True, key='_LIST_')],
         ]
         tab_window = sg.Window(f'Search by {type}', layout, size=(800, 800), background_color='#F6F3E7')
@@ -196,7 +196,7 @@ csv_file_path = "food_recipes.csv"
 cookbook = CookBook(csv_file_path)
 
 # Sorting by time
-cookbook.quicksort_by_time()
+# `cookbook.quicksort_by_time()
 # puts NA recipes to end
 cookbook.recipe_list = cookbook.recipe_list[5262:] + cookbook.recipe_list[:5262]
 # Populate recipe names into list
