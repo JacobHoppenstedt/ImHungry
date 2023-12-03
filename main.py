@@ -5,7 +5,7 @@ from PIL import Image, ImageTk
 from io import BytesIO
 from icrawler.builtin import GoogleImageCrawler, GoogleFeeder, GoogleParser
 from customlinkprinter import CustomLinkPrinter
-
+import requests
 rating_images = {
     (4.5, 5.0): "images/Star_rating_5_of_5.png",
     (4.0, 4.5): "images/Star_rating_4.5_of_5.png",
@@ -19,33 +19,47 @@ rating_images = {
     (0.0, 0.5): "images/Star_rating_0.5_of_5.png",
 }
 
-def create_popup(item, cookbook):
+def create_popup(item, cookbook, file_urls):
     layout = [
         [sg.Text(item, justification='center', size=(400, 2))],
         [sg.Listbox(cookbook.get_recipe(item), size=(100, 20))],
         [sg.Text(cookbook.get_recipe_time(item), justification='center', size=(400, 2))],
-        [sg.Image(key='_IMAGE_', size=(200, 150), pad=((125, 125), (20, 20)))],
+        [
+            sg.Image(key='_RATING_IMAGE_', size=(200, 150), pad=((125, 25), (20, 20))),
+            sg.Image(key='_RECIPE_IMAGE_', size=(200, 150), pad=((25, 125), (20, 20))),
+        ],
         [sg.Button('OK')]
     ]
 
     window = sg.Window(item, layout, size=(800, 800), finalize=True)
     recipe_rating = float(cookbook.get_recipe_rating(item))
 
-    image_path = None
+    rating_image_path = None
     for rating_range, path in rating_images.items():
         if rating_range[0] <= recipe_rating <= rating_range[1]:
-            image_path = path
+            rating_image_path = path
             break
 
-    if image_path:
+    if rating_image_path:
         # Load the image and update the Image element
-        image = Image.open(image_path)
-
-        resized_image = image.resize((500, 100))
-        bio = BytesIO()
-        resized_image.save(bio, format="PNG")
-        image_data = bio.getvalue()
-        window['_IMAGE_'].update(data=image_data)
+        rating_image = Image.open(rating_image_path)
+        resized_rating_image = rating_image.resize((500, 100))
+        rating_bio = BytesIO()
+        resized_rating_image.save(rating_bio, format="PNG")
+        rating_image_data = rating_bio.getvalue()
+        window['_RATING_IMAGE_'].update(data=rating_image_data)
+    if file_urls:
+        recipe_image_url = file_urls[0]  # Assuming you want to use the first URL
+        try:
+            response = requests.get(recipe_image_url)
+            recipe_image = Image.open(BytesIO(response.content))
+            resized_recipe_image = recipe_image.resize((200, 150))
+            recipe_bio = BytesIO()
+            resized_recipe_image.save(recipe_bio, format="PNG")
+            recipe_image_data = recipe_bio.getvalue()
+            window['_RECIPE_IMAGE_'].update(data=recipe_image_data)
+        except Exception as e:
+            print(f"Error loading recipe image: {e}")
 
     # Event loop for the popup window
     while True:
@@ -57,6 +71,7 @@ def create_popup(item, cookbook):
     window.close()
 
 def open_search_type(type):
+    sorted = False
     if type=='Meal Name':
         layout = [
             [sg.Text("Search for a meal...", size=(400, 1))],
@@ -82,10 +97,10 @@ def open_search_type(type):
                 sorted = True
             if event == '_LIST_' and len(values['_LIST_']):
                 selected_item = values['_LIST_'][0]
-                create_popup(selected_item, cookbook)
+                create_popup(selected_item, cookbook, crawl_image(selected_item))
             if event == '_INGREDIENT_LIST_' and len(values['_INGREDIENT_LIST_']):
                 selected_item = values['_INGREDIENT_LIST_'][0]
-                create_popup(selected_item, cookbook)
+                create_popup(selected_item, cookbook, crawl_image(selected_item))
             if event == 'Back':
                 break
         tab_window.close()
@@ -108,16 +123,38 @@ def open_search_type(type):
 
             if event == '_LIST_' and len(values['_LIST_']):
                 selected_item = values['_LIST_'][0]
-                create_popup(selected_item, cookbook)
+                create_popup(selected_item, cookbook, crawl_iamge(selected_item))
             if event == '_INGREDIENT_LIST_' and len(values['_INGREDIENT_LIST_']):
                 selected_item = values['_INGREDIENT_LIST_'][0]
-                create_popup(selected_item, cookbook)
+                create_popup(selected_item, cookbook, crawl_image(selected_item))
             if event == 'Back':
                 break
 
         tab_window.close()
     
     
+def crawl_image(recipe_name):
+    # Function to crawl for the image of the specified recipe
+    init_params = {
+        'feeder_cls': GoogleFeeder,
+        'parser_cls': GoogleParser,
+        'downloader_cls': CustomLinkPrinter,
+    }
+    params = {
+        'filters': None,
+        'offset': 0,
+        'max_num': 1,
+        'min_size': None,
+        'max_size': None,
+        'language': 'en',
+        'file_idx_offset': 0,
+        'overwrite': False,
+    }
+
+    google_crawler = GoogleImageCrawler(**init_params)
+    google_crawler.downloader.file_urls = []
+    google_crawler.crawl(keyword=recipe_name, **params)
+    return google_crawler.downloader.file_urls
 
 def search_by_name(search, cookbook, window):
     new_values = [x for x in meal_names if search.lower() in x.lower()]
@@ -164,30 +201,11 @@ startup_layout = [
 # Create the initial startup window
 startup_window = sg.Window('ImHungry', startup_layout, size=(1200, 700), background_color='#F6F3E7', element_justification='c')
 
-init_params = {
-    'feeder_cls': GoogleFeeder,
-    'parser_cls': GoogleParser,
-    'downloader_cls': CustomLinkPrinter, 
-    }
-keyword = "your_search_keyword"
-params = {
-    'filters': None,
-    'offset': 0,
-    'max_num': 100,
-    'min_size': None,
-    'max_size': None,
-    'language': 'en',  
-    'file_idx_offset': 0,
-    'overwrite': False,
-    }
-sorted = False
+
+
 while True:
     
     startup_event, startup_values = startup_window.read()
-    google_crawler = GoogleImageCrawler(**init_params)
-    google_crawler.downloader.file_urls = []
-    google_crawler.crawl(keyword=keyword, **params)
-    file_urls =  google_crawler.downloader.file_urls
 
     if startup_event == sg.WIN_CLOSED or startup_event == 'Quit':
         break
