@@ -21,7 +21,7 @@ rating_images = {
     (0.0, 0.5): "images/Star_rating_0.5_of_5.png",
 }
 
-def create_popup(item, cookbook):
+def create_popup(item, cookbook, file_urls):
     text = item.replace(' ', '+')
     url = 'https://google.com/search?q=' + text + '+recipe'
     font = ()
@@ -30,8 +30,10 @@ def create_popup(item, cookbook):
         [sg.Text(item, justification='center', size=(400, 2))],
         [sg.Listbox(cookbook.get_recipe(item), size=(100, 20))],
         [sg.Text(cookbook.get_recipe_time(item), justification='center', size=(400, 2))],
-        [sg.Image(key='_RATING_IMAGE_', size=(200, 150), pad=((125, 25), (20, 20)))],
+
         [sg.Image(key='_RECIPE_IMAGE_', size=(200, 150), pad=((125, 25), (20, 20)))],
+        [sg.Image(key='_RATING_IMAGE_', size=(200, 150), pad=((125, 25), (20, 20)))],
+
         [sg.Button('OK')]
     ]
 
@@ -47,7 +49,7 @@ def create_popup(item, cookbook):
     if rating_image_path:
         # Load the image and update the Image element
         rating_image = Image.open(rating_image_path)
-        resized_rating_image = rating_image.resize((500, 100))
+        resized_rating_image = rating_image.resize((250, 50))
         rating_bio = BytesIO()
         resized_rating_image.save(rating_bio, format="PNG")
         rating_image_data = rating_bio.getvalue()
@@ -106,10 +108,10 @@ def open_search_type(type):
                 sorted = True
             if event == '_LIST_' and len(values['_LIST_']):
                 selected_item = values['_LIST_'][0]
-                create_popup(selected_item, cookbook, crawl_image(selected_item + 'food'))
+                create_popup(selected_item, cookbook, crawl_image(selected_item + 'food or drink'))
             if event == '_INGREDIENT_LIST_' and len(values['_INGREDIENT_LIST_']):
                 selected_item = values['_INGREDIENT_LIST_'][0]
-                create_popup(selected_item, cookbook, crawl_image(selected_item + 'food'))
+                create_popup(selected_item, cookbook, crawl_image(selected_item + 'food or drink'))
             if event == 'Back':
                 break
         tab_window.close()
@@ -162,6 +164,29 @@ def sort_by_time(cookbook, window, current_tab_layout):
     cookbook.quicksort_by_time()
     updated_meal_names = [recipe.name for recipe in cookbook.recipe_list]
     window.Element('_LIST_').Update(updated_meal_names)
+
+def crawl_image(recipe_name):
+    # Function to crawl for the image of the specified recipe
+    init_params = {
+        'feeder_cls': GoogleFeeder,
+        'parser_cls': GoogleParser,
+        'downloader_cls': CustomLinkPrinter,
+    }
+    params = {
+        'filters': None,
+        'offset': 0,
+        'max_num': 1,
+        'min_size': None,
+        'max_size': None,
+        'language': 'en',
+        'file_idx_offset': 0,
+        'overwrite': False,
+    }
+
+    google_crawler = GoogleImageCrawler(**init_params)
+    google_crawler.downloader.file_urls = []
+    google_crawler.crawl(keyword=recipe_name, **params)
+    return google_crawler.downloader.file_urls
 
 # Initialize cookbook...
 csv_file_path = "food_recipes.csv" 
