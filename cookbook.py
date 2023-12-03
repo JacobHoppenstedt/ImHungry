@@ -26,6 +26,11 @@ class CookBook:
                 results.append(recipe.name)
         return results
 
+    def get_recipe_rating(self, dish_name):
+        for recipe in self.recipe_list:
+            if recipe.name == dish_name:
+                return recipe.rating
+        return "Rating not found"
 
     def get_recipe(self, dish_name):
         for recipe in self.recipe_list:
