@@ -25,6 +25,7 @@ def create_popup(item, cookbook):
     text = item.replace(' ', '+')
     url = 'https://google.com/search?q=' + text + '+recipe'
     font = ()
+    print(f"Debug: Received file_urls in create_popup: {file_urls}")
     layout = [
         [sg.Text(item, justification='center', size=(400, 2))],
         [sg.Listbox(cookbook.get_recipe(item), size=(100, 20))],
@@ -52,7 +53,8 @@ def create_popup(item, cookbook):
         rating_image_data = rating_bio.getvalue()
         window['_RATING_IMAGE_'].update(data=rating_image_data)
     if file_urls:
-        recipe_image_url = file_urls[0]  # Assuming you want to use the first URL
+        print(f"Debug: Using file_url in create_popup: {file_urls[0]}")
+        recipe_image_url = file_urls[0]
         try:
             response = requests.get(recipe_image_url)
             recipe_image = Image.open(BytesIO(response.content))
