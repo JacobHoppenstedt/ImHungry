@@ -22,10 +22,14 @@ rating_images = {
 }
 
 def create_popup(item, cookbook):
+    text = item.replace(' ', '+')
+    url = 'https://google.com/search?q=' + text + '+recipe'
+    font = ()
     layout = [
         [sg.Text(item, justification='center', size=(400, 2))],
         [sg.Listbox(cookbook.get_recipe(item), size=(100, 20))],
         [sg.Text(cookbook.get_recipe_time(item), justification='center', size=(400, 2))],
+        [sg.Text('Link to Recipe', tooltip=url, enable_events=True, font ='underline')],
         [sg.Image(key='_IMAGE_', size=(200, 150), pad=((125, 125), (20, 20)))],
         [sg.Button('OK')]
     ]
