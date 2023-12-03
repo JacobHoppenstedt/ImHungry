@@ -242,23 +242,6 @@ startup_layout = [
 # Create the initial startup window
 startup_window = sg.Window('ImHungry', startup_layout, size=(1200, 700), background_color='#F6F3E7', element_justification='c')
 
-init_params = {
-    'feeder_cls': GoogleFeeder,
-    'parser_cls': GoogleParser,
-    'downloader_cls': CustomLinkPrinter, 
-    }
-keyword = "your_search_keyword"
-params = {
-    'filters': None,
-    'offset': 0,
-    'max_num': 100,
-    'min_size': None,
-    'max_size': None,
-    'language': 'en',  
-    'file_idx_offset': 0,
-    'overwrite': False,
-    }
-sorted = False
 while True:
     
     startup_event, startup_values = startup_window.read()
