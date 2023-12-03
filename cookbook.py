@@ -19,6 +19,14 @@ class CookBook:
     def add_entry(self, recipe):
         self.recipe_list.append(recipe)
 
+    def search_by_ingredients(self, search_ingredient):
+        results = []
+        for recipe in self.recipe_list:
+            if any(search_ingredient.lower() in ingredient.lower() for ingredient in recipe.ingredients):
+                results.append(recipe.name)
+        return results
+
+
     def get_recipe(self, dish_name):
         for recipe in self.recipe_list:
             if recipe.name == dish_name:
