@@ -3,6 +3,8 @@ from cookbook import CookBook
 import PySimpleGUI as sg           
 from PIL import Image, ImageTk
 from io import BytesIO
+import requests
+import bs4
 from icrawler.builtin import GoogleImageCrawler, GoogleFeeder, GoogleParser
 from customlinkprinter import CustomLinkPrinter
 import requests
@@ -19,7 +21,10 @@ rating_images = {
     (0.0, 0.5): "images/Star_rating_0.5_of_5.png",
 }
 
-def create_popup(item, cookbook, file_urls):
+def create_popup(item, cookbook):
+    text = item.replace(' ', '+')
+    url = 'https://google.com/search?q=' + text + '+recipe'
+    font = ()
     print(f"Debug: Received file_urls in create_popup: {file_urls}")
     layout = [
         [sg.Text(item, justification='center', size=(400, 2))],
@@ -137,28 +142,6 @@ def open_search_type(type):
         tab_window.close()
     
     
-def crawl_image(recipe_name):
-    # Function to crawl for the image of the specified recipe
-    init_params = {
-        'feeder_cls': GoogleFeeder,
-        'parser_cls': GoogleParser,
-        'downloader_cls': CustomLinkPrinter,
-    }
-    params = {
-        'filters': None,
-        'offset': 0,
-        'max_num': 1,
-        'min_size': None,
-        'max_size': None,
-        'language': 'en',
-        'file_idx_offset': 0,
-        'overwrite': False,
-    }
-
-    google_crawler = GoogleImageCrawler(**init_params)
-    google_crawler.downloader.file_urls = []
-    google_crawler.crawl(keyword=recipe_name, **params)
-    return google_crawler.downloader.file_urls
 
 def search_by_name(search, cookbook, window):
     new_values = [x for x in meal_names if search.lower() in x.lower()]
