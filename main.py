@@ -57,11 +57,13 @@ def create_popup(item, cookbook):
     window.close()
 
 def open_search_type(type):
+    sorted = False
     if type=='Meal Name':
         layout = [
             [sg.Text("Search for a meal...", size=(400, 1))],
             [sg.Input(do_not_clear=True, size=(40, 2), enable_events=True, key='_INPUT_')],
             [sg.Button('Sort by Rating', size=(20, 2), key='_SORT_BY_RATING_')],
+            [sg.Button('Sort by Time', size=(20, 2), key='_SORT_BY_RATING_')],
             [sg.Listbox(meal_names, size=(400, 400), enable_events=True, key='_LIST_')],
         ]
         tab_window = sg.Window(f'Search by {type}', layout, size=(800, 800), background_color='#F6F3E7')
@@ -79,6 +81,9 @@ def open_search_type(type):
                     tab_window.Element('_LIST_').Update(meal_names)
             if event == '_SORT_BY_RATING_':
                 sort_by_rating(cookbook, tab_window, layout)
+                sorted = True
+            if event == '_SORT_BY_TIME_':
+                sort_by_time(cookbook, tab_window, layout)
                 sorted = True
             if event == '_LIST_' and len(values['_LIST_']):
                 selected_item = values['_LIST_'][0]
@@ -134,6 +139,11 @@ def sort_by_rating(cookbook, window, current_tab_layout):
     updated_meal_names.reverse()
     window.Element('_LIST_').Update(updated_meal_names)
 
+def sort_by_time(cookbook, window, current_tab_layout):
+    cookbook.quicksort_by_time()
+    updated_meal_names = [recipe.name for recipe in cookbook.recipe_list]
+    window.Element('_LIST_').Update(updated_meal_names)
+
 # Initialize cookbook...
 csv_file_path = "food_recipes.csv" 
 cookbook = CookBook(csv_file_path)
@@ -180,6 +190,7 @@ params = {
     'file_idx_offset': 0,
     'overwrite': False,
     }
+
 sorted = False
 while True:
     
