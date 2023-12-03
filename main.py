@@ -3,6 +3,8 @@ from cookbook import CookBook
 import PySimpleGUI as sg           
 from PIL import Image, ImageTk
 from io import BytesIO
+import requests
+import bs4
 from icrawler.builtin import GoogleImageCrawler, GoogleFeeder, GoogleParser
 from customlinkprinter import CustomLinkPrinter
 import requests
@@ -19,16 +21,17 @@ rating_images = {
     (0.0, 0.5): "images/Star_rating_0.5_of_5.png",
 }
 
-def create_popup(item, cookbook, file_urls):
+def create_popup(item, cookbook):
+    text = item.replace(' ', '+')
+    url = 'https://google.com/search?q=' + text + '+recipe'
+    font = ()
     print(f"Debug: Received file_urls in create_popup: {file_urls}")
     layout = [
         [sg.Text(item, justification='center', size=(400, 2))],
         [sg.Listbox(cookbook.get_recipe(item), size=(100, 20))],
         [sg.Text(cookbook.get_recipe_time(item), justification='center', size=(400, 2))],
-        [
-            sg.Image(key='_RATING_IMAGE_', size=(200, 150), pad=((125, 25), (20, 20))),
-            sg.Image(key='_RECIPE_IMAGE_', size=(200, 150), pad=((25, 125), (20, 20))),
-        ],
+        [sg.Image(key='_RATING_IMAGE_', size=(200, 150), pad=((125, 25), (20, 20)))],
+        [sg.Image(key='_RECIPE_IMAGE_', size=(200, 150), pad=((125, 25), (20, 20)))],
         [sg.Button('OK')]
     ]
 
@@ -55,7 +58,7 @@ def create_popup(item, cookbook, file_urls):
         try:
             response = requests.get(recipe_image_url)
             recipe_image = Image.open(BytesIO(response.content))
-            resized_recipe_image = recipe_image.resize((200, 150))
+            resized_recipe_image = recipe_image.resize((200, 200))
             recipe_bio = BytesIO()
             resized_recipe_image.save(recipe_bio, format="PNG")
             recipe_image_data = recipe_bio.getvalue()
@@ -103,10 +106,10 @@ def open_search_type(type):
                 sorted = True
             if event == '_LIST_' and len(values['_LIST_']):
                 selected_item = values['_LIST_'][0]
-                create_popup(selected_item, cookbook, crawl_image(selected_item))
+                create_popup(selected_item, cookbook, crawl_image(selected_item + 'food'))
             if event == '_INGREDIENT_LIST_' and len(values['_INGREDIENT_LIST_']):
                 selected_item = values['_INGREDIENT_LIST_'][0]
-                create_popup(selected_item, cookbook, crawl_image(selected_item))
+                create_popup(selected_item, cookbook, crawl_image(selected_item + 'food'))
             if event == 'Back':
                 break
         tab_window.close()
@@ -129,38 +132,16 @@ def open_search_type(type):
 
             if event == '_LIST_' and len(values['_LIST_']):
                 selected_item = values['_LIST_'][0]
-                create_popup(selected_item, cookbook, crawl_iamge(selected_item))
+                create_popup(selected_item, cookbook, crawl_image(selected_item + 'food'))
             if event == '_INGREDIENT_LIST_' and len(values['_INGREDIENT_LIST_']):
                 selected_item = values['_INGREDIENT_LIST_'][0]
-                create_popup(selected_item, cookbook, crawl_image(selected_item))
+                create_popup(selected_item, cookbook, crawl_image(selected_item + 'food'))
             if event == 'Back':
                 break
 
         tab_window.close()
     
     
-def crawl_image(recipe_name):
-    # Function to crawl for the image of the specified recipe
-    init_params = {
-        'feeder_cls': GoogleFeeder,
-        'parser_cls': GoogleParser,
-        'downloader_cls': CustomLinkPrinter,
-    }
-    params = {
-        'filters': None,
-        'offset': 0,
-        'max_num': 1,
-        'min_size': None,
-        'max_size': None,
-        'language': 'en',
-        'file_idx_offset': 0,
-        'overwrite': False,
-    }
-
-    google_crawler = GoogleImageCrawler(**init_params)
-    google_crawler.downloader.file_urls = []
-    google_crawler.crawl(keyword=recipe_name, **params)
-    return google_crawler.downloader.file_urls
 
 def search_by_name(search, cookbook, window):
     new_values = [x for x in meal_names if search.lower() in x.lower()]
