@@ -7,7 +7,8 @@ import webbrowser
 from icrawler.builtin import GoogleImageCrawler, GoogleFeeder, GoogleParser
 from customlinkprinter import CustomLinkPrinter
 import requests
-rating_images = {
+
+rating_images = { # dictionary of rating images
     (4.5, 5.0): "images/Star_rating_5_of_5.png",
     (4.0, 4.5): "images/Star_rating_4.5_of_5.png",
     (3.5, 4.0): "images/Star_rating_4_of_5.png",
@@ -210,25 +211,25 @@ def open_search_type(type):
     
     
 
-def search_by_name(search, cookbook, window, meals):
-    new_values = [x for x in meals if search.lower() in x.lower()]
-    window.Element('_LIST_').Update(new_values)
+def search_by_name(search, cookbook, window, meals): 
+    new_values = [x for x in meals if search.lower() in x.lower()] # if recipe name is in recipe_list
+    window.Element('_LIST_').Update(new_values) # update the listbox with the new values
 
 def search_by_ingredients(search_ingredient, cookbook, window):
-    search_ingredient = search_ingredient.lower()
-    ingredient_results = cookbook.search_by_ingredients(search_ingredient)
-    window.Element('_INGREDIENT_LIST_').Update(ingredient_results)
+    search_ingredient = search_ingredient.lower() # convert to lowercase
+    ingredient_results = cookbook.search_by_ingredients(search_ingredient) # search for recipes by ingredient
+    window.Element('_INGREDIENT_LIST_').Update(ingredient_results) # update the listbox with the new values
 
 def sort_by_rating(cookbook, window, current_tab_layout):
-    cookbook.mergesort_by_rating()
-    updated_meal_names = [recipe.name for recipe in cookbook.recipe_list]
-    updated_meal_names.reverse()
+    cookbook.mergesort_by_rating() # sort by rating
+    updated_meal_names = [recipe.name for recipe in cookbook.recipe_list] # update recipe names
+    updated_meal_names.reverse() # reverse list to sort from highest to lowest
     return updated_meal_names
 
 def sort_by_time(cookbook, window, current_tab_layout):
-    cookbook.quicksort_by_time()
-    cookbook.recipe_list = cookbook.recipe_list[5262:] + cookbook.recipe_list[:5262]
-    updated_meal_names = [recipe.name for recipe in cookbook.recipe_list]
+    cookbook.quicksort_by_time() # sort by time
+    cookbook.recipe_list = cookbook.recipe_list[5262:] + cookbook.recipe_list[:5262] # move recipes with 'N/A' to the end
+    updated_meal_names = [recipe.name for recipe in cookbook.recipe_list] # update recipe names
     return updated_meal_names
     
 
@@ -250,6 +251,7 @@ def crawl_image(recipe_name):
         'overwrite': False,
     }
 
+    # Referenced from https://github.com/hellock/icrawler/issues/73 for obtaining the file URLs
     google_crawler = GoogleImageCrawler(**init_params)
     google_crawler.downloader.file_urls = []
     google_crawler.crawl(keyword=recipe_name, **params)
