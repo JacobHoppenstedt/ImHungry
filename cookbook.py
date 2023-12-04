@@ -19,12 +19,14 @@ class CookBook:
     def add_entry(self, recipe):
         self.recipe_list.append(recipe)
 
-    def search_by_ingredients(self, search_ingredient):
-        results = []
-        for recipe in self.recipe_list:
-            if any(search_ingredient.lower() in ingredient.lower() for ingredient in recipe.ingredients):
-                results.append(recipe.name)
-        return results
+    def search_by_ingredients(self, search_ingredients):
+            # Split the input string into a list of ingredients
+            ingredients_list = [ingredient.strip().lower() for ingredient in search_ingredients.split(',')]
+
+            # Filter recipes that contain all specified ingredients
+            matching_recipes = [recipe.name for recipe in self.recipe_list if all(ingredient in recipe.ingredients for ingredient in ingredients_list)]
+
+            return matching_recipes
 
     def get_recipe_rating(self, dish_name):
         for recipe in self.recipe_list:
@@ -43,9 +45,6 @@ class CookBook:
             if recipe.name == dish_name:
                 return recipe.time
 
-    def search_recipes_by_ingredients(self, query_ingredients):
-        recipes_after_search = [recipe for recipe in self.recipe_list if all(ingredient in recipe.ingredients for ingredient in query_ingredients)]
-        return recipes_after_search
 
     def quicksort_by_time(self):
             self.recipe_list = self._quicksort_by_time(self.recipe_list)
