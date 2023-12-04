@@ -105,7 +105,7 @@ def open_search_type(type):
         layout = [
             [sg.Text("Search for a meal...", size=(400, 1))],
             [sg.Input(do_not_clear=True, size=(40, 2), enable_events=True, key='_INPUT_')],
-            [sg.Button('Sort by Rating', size=(20, 2), key='_SORT_BY_RATING_')],
+            [sg.Button('Sort by Rating ↓', size=(20, 2), key='_SORT_BY_RATING_')],
             [sg.Button('Sort by Time ↑', size=(20, 2), key='_SORT_BY_TIME_')],
             [sg.Listbox(meal_names, size=(400, 400), enable_events=True, key='_LIST_')],
         ]
