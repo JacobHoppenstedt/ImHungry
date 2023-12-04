@@ -74,7 +74,6 @@ def create_popup(item, cookbook, file_urls):
         rating_image_data = rating_bio.getvalue()
         window['_RATING_IMAGE_'].update(data=rating_image_data)
     if file_urls:
-        print(f"Debug: Using file_url in create_popup: {file_urls[0]}")
         recipe_image_url = file_urls[0]
         try:
             response = requests.get(recipe_image_url)
