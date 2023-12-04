@@ -24,13 +24,14 @@ We utilized a CSV file containing recipes, including details such as recipe name
 
 ## Dependencies
 Make sure to install the required dependencies before running the application. Use the following command:
-'''bash
+```
+bash
 pip install -r requirements.txt
-
+```
 ## Authors
-- **Jacob Hoppenstedt
-- **Eric Hengber
-- **Aryeh Bloom
+- Jacob Hoppenstedt
+- Eric Hengber
+- Aryeh Bloom
 
 ## How to Use
 1. Clone the repository.
