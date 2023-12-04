@@ -19,12 +19,14 @@ class CookBook:
     def add_entry(self, recipe): # adds to the recipe list
         self.recipe_list.append(recipe)
 
-    def search_by_ingredients(self, search_ingredient): # searches for recipes by ingredient
-        results = []
-        for recipe in self.recipe_list: # traverses recipe list
-            if any(search_ingredient.lower() in ingredient.lower() for ingredient in recipe.ingredients): # if any of the ingredients in the recipe contains the search ingredient
-                results.append(recipe.name) # add it to the results list
-        return results
+    def search_by_ingredients(self, search_ingredients):
+            # Split the input string into a list of ingredients
+            ingredients_list = [ingredient.strip().lower() for ingredient in search_ingredients.split(',')]
+
+            # Filter recipes that contain all specified ingredients
+            matching_recipes = [recipe.name for recipe in self.recipe_list if all(ingredient in recipe.ingredients for ingredient in ingredients_list)]
+
+            return matching_recipes
 
     def get_recipe_rating(self, dish_name): # gets the rating of a recipe
         for recipe in self.recipe_list: # traverses recipe list
@@ -43,8 +45,8 @@ class CookBook:
             if recipe.name == dish_name:
                 return recipe.time
 
-    def search_recipes_by_ingredients(self, query_ingredients): 
-        recipes_after_search = [recipe for recipe in self.recipe_list if all(ingredient in recipe.ingredients for ingredient in query_ingredients)] # if all of the ingredients in the search are in the recipe, add it to the list
+    def search_recipes_by_ingredients(self, query_ingredients):
+        recipes_after_search = [recipe for recipe in self.recipe_list if all(ingredient in recipe.ingredients for ingredient in query_ingredients)]
         return recipes_after_search
 
     def quicksort_by_time(self): # quicksort helper function

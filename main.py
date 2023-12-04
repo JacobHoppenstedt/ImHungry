@@ -165,31 +165,18 @@ def open_search_type(type):
 
             if event in (sg.WIN_CLOSED, 'OK'):
                 break
-            if values['_INGREDIENT_INPUT_'] != '':
+            if values['_INGREDIENT_INPUT_'] != '' and not sorted_rating and not sorted_time:
                 search_by_ingredients(values['_INGREDIENT_INPUT_'], cookbook, tab_window)
-            else:
-                tab_window.Element('_INGREDIENT_LIST_').Update([])
-            if values['_INGREDIENT_INPUT_'] != '':
-                if sorted_time:
-                    search_by_ingredients(values['_INGREDIENT_INPUT_'], cookbook, tab_window)
-                elif sorted_rating:
-                    search_by_ingredients(values['_INGREDIENT_INPUT_'], cookbook, tab_window)
-                else:
-                    search_by_ingredients(values['_INGREDIENT_INPUT_'], cookbook, tab_window)
             elif values['_INGREDIENT_INPUT_'] == '':
-                if sorted_rating:
-                    sort_by_rating(cookbook, tab_window, layout)
-                else:
-                    tab_window.Element('_INGREDIENT_INPUT_').Update(meal_names)
-                if sorted_time:
-                    sort_by_time(cookbook, tab_window, layout)
-                else:
-                    tab_window.Element('_INGREDIENT_INPUT_').Update(meal_names)
-
+                tab_window.Element('_INGREDIENT_LIST_').Update('')
+            if sorted_rating:
+                search_by_ingredients(values['_INGREDIENT_INPUT_'], cookbook, tab_window, rating_sorted_meal_names)
+            if sorted_time:
+                search_by_ingredients(values['_INGREDIENT_INPUT_'], cookbook, tab_window, time_sorted_meal_names)
             if event == '_SORT_BY_RATING_':
                 rating_sorted_meal_names = sort_by_rating(cookbook, tab_window, layout)
                 tab_window.Element('_INGREDIENT_LIST_').Update(rating_sorted_meal_names)
-                search_by_ingredients(values['_INGREDIENT_INPUT_'], cookbook, tab_window)
+                search_by_ingredients(values['_INGREDIENT_INPUT_'], cookbook, tab_window, rating_sorted_meal_names)
                 sorted_rating = True
                 sorted_time = False
             if event == '_SORT_BY_TIME_':
@@ -215,10 +202,32 @@ def search_by_name(search, cookbook, window, meals):
     new_values = [x for x in meals if search.lower() in x.lower()] # if recipe name is in recipe_list
     window.Element('_LIST_').Update(new_values) # update the listbox with the new values
 
-def search_by_ingredients(search_ingredient, cookbook, window):
-    search_ingredient = search_ingredient.lower() # convert to lowercase
-    ingredient_results = cookbook.search_by_ingredients(search_ingredient) # search for recipes by ingredient
-    window.Element('_INGREDIENT_LIST_').Update(ingredient_results) # update the listbox with the new values
+def search_by_ingredients(search_ingredients, cookbook, window, sorted_list=None):
+    # Split the input string into a list of ingredients
+    search_terms = [term.strip().lower() for term in search_ingredients.split(',')]
+    
+    # Filter recipes that contain any specified ingredient word
+    matching_recipes = []
+    for recipe in cookbook.recipe_list:
+        recipe_ingredients_lower = [ingredient.lower() for ingredient in recipe.ingredients]
+        if all(term in ' '.join(recipe_ingredients_lower) for term in search_terms):
+            matching_recipes.append(recipe.name)
+    if sorted_list:
+        cookbook.mergesort_by_rating()
+        search_terms = [term.strip().lower() for term in search_ingredients.split(',')]
+        # Filter recipes that contain any specified ingredient word
+        matching_recipes = []
+        for recipe in cookbook.recipe_list:
+            recipe_ingredients_lower = [ingredient.lower() for ingredient in recipe.ingredients]
+            if all(term in ' '.join(recipe_ingredients_lower) for term in search_terms):
+                matching_recipes.append(recipe.name)
+        matching_recipes.reverse()
+        window.Element('_INGREDIENT_LIST_').Update(matching_recipes)
+    else:
+        window.Element('_INGREDIENT_LIST_').Update(matching_recipes)
+        
+
+
 
 def sort_by_rating(cookbook, window, current_tab_layout):
     cookbook.mergesort_by_rating() # sort by rating

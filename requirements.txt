@@ -1,0 +1,5 @@
+pip install iobytes
+pip install requests
+pip install icrawler
+pip install Pillow
+pip install PySimpleGUI
