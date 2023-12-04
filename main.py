@@ -1,11 +1,9 @@
-from recipe import Recipe
 from cookbook import CookBook
 import PySimpleGUI as sg           
-from PIL import Image, ImageTk
+from PIL import Image
 from io import BytesIO
 import requests
 import webbrowser
-import bs4
 from icrawler.builtin import GoogleImageCrawler, GoogleFeeder, GoogleParser
 from customlinkprinter import CustomLinkPrinter
 import requests
@@ -74,7 +72,6 @@ def create_popup(item, cookbook, file_urls):
         rating_image_data = rating_bio.getvalue()
         window['_RATING_IMAGE_'].update(data=rating_image_data)
     if file_urls:
-        print(f"Debug: Using file_url in create_popup: {file_urls[0]}")
         recipe_image_url = file_urls[0]
         try:
             response = requests.get(recipe_image_url)
@@ -256,6 +253,7 @@ def crawl_image(recipe_name):
     google_crawler = GoogleImageCrawler(**init_params)
     google_crawler.downloader.file_urls = []
     google_crawler.crawl(keyword=recipe_name, **params)
+    print(f"Debug: Retrieved file URLs: {google_crawler.downloader.file_urls}")
     return google_crawler.downloader.file_urls
 
 # Initialize cookbook...
