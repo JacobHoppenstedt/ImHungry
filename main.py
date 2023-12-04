@@ -157,6 +157,8 @@ def open_search_type(type):
         layout = [
             [sg.Text("Search for recipes by ingredients...", size=(400, 1))],
             [sg.Input(do_not_clear=True, size=(40, 2), enable_events=True, key='_INGREDIENT_INPUT_')],
+            [sg.Button('Sort by Rating ↓', size=(20, 2), key='_SORT_BY_RATING_')],
+            [sg.Button('Sort by Time ↑', size=(20, 2), key='_SORT_BY_TIME_')],
             [sg.Listbox([], size=(400, 400), enable_events=True, key='_INGREDIENT_LIST_')],
         ]
         tab_window = sg.Window(f'Search by {type}', layout, size=(800, 800), background_color='#F6F3E7')
@@ -169,7 +171,35 @@ def open_search_type(type):
                 search_by_ingredients(values['_INGREDIENT_INPUT_'], cookbook, tab_window)
             else:
                 tab_window.Element('_INGREDIENT_LIST_').Update([])
+            if values['_INGREDIENT_INPUT_'] != '':
+                if sorted_time:
+                    search_by_ingredients(values['_INGREDIENT_INPUT_'], cookbook, tab_window)
+                elif sorted_rating:
+                    search_by_ingredients(values['_INGREDIENT_INPUT_'], cookbook, tab_window)
+                else:
+                    search_by_ingredients(values['_INGREDIENT_INPUT_'], cookbook, tab_window)
+            elif values['_INGREDIENT_INPUT_'] == '':
+                if sorted_rating:
+                    sort_by_rating(cookbook, tab_window, layout)
+                else:
+                    tab_window.Element('_INGREDIENT_INPUT_').Update(meal_names)
+                if sorted_time:
+                    sort_by_time(cookbook, tab_window, layout)
+                else:
+                    tab_window.Element('_INGREDIENT_INPUT_').Update(meal_names)
 
+            if event == '_SORT_BY_RATING_':
+                rating_sorted_meal_names = sort_by_rating(cookbook, tab_window, layout)
+                tab_window.Element('_INGREDIENT_LIST_').Update(rating_sorted_meal_names)
+                search_by_ingredients(values['_INGREDIENT_INPUT_'], cookbook, tab_window)
+                sorted_rating = True
+                sorted_time = False
+            if event == '_SORT_BY_TIME_':
+                time_sorted_meal_names = sort_by_time(cookbook, tab_window, layout)
+                tab_window.Element('_INGREDIENT_LIST_').Update(time_sorted_meal_names)
+                search_by_ingredients(values['_INGREDIENT_INPUT_'], cookbook, tab_window)
+                sorted_time = True
+                sorted_rating = False
             if event == '_LIST_' and len(values['_LIST_']):
                 selected_item = values['_LIST_'][0]
                 create_popup(selected_item, cookbook, crawl_image(selected_item + 'food or drink'))
