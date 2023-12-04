@@ -106,7 +106,7 @@ def open_search_type(type):
             [sg.Text("Search for a meal...", size=(400, 1))],
             [sg.Input(do_not_clear=True, size=(40, 2), enable_events=True, key='_INPUT_')],
             [sg.Button('Sort by Rating', size=(20, 2), key='_SORT_BY_RATING_')],
-            [sg.Button('Sort by Time', size=(20, 2), key='_SORT_BY_TIME_')],
+            [sg.Button('Sort by Time ↑', size=(20, 2), key='_SORT_BY_TIME_')],
             [sg.Listbox(meal_names, size=(400, 400), enable_events=True, key='_LIST_')],
         ]
         tab_window = sg.Window(f'Search by {type}', layout, size=(800, 800), background_color='#F6F3E7')
@@ -116,7 +116,12 @@ def open_search_type(type):
             if event in (sg.WIN_CLOSED, 'OK'):
                 break
             if values['_INPUT_'] != '':
-                search_by_name(values['_INPUT_'], cookbook, tab_window)
+                if sorted_time:
+                    search_by_name(values['_INPUT_'], cookbook, tab_window, time_sorted_meal_names)
+                elif sorted_rating:
+                    search_by_name(values['_INPUT_'], cookbook, tab_window, rating_sorted_meal_names)
+                else:
+                    search_by_name(values['_INPUT_'], cookbook, tab_window, meal_names)
             elif values['_INPUT_'] == '':
                 if sorted_rating:
                     sort_by_rating(cookbook, tab_window, layout)
@@ -127,11 +132,17 @@ def open_search_type(type):
                 else:
                     tab_window.Element('_LIST_').Update(meal_names)
             if event == '_SORT_BY_RATING_':
-                sort_by_rating(cookbook, tab_window, layout)
+                rating_sorted_meal_names = sort_by_rating(cookbook, tab_window, layout)
+                tab_window.Element('_LIST_').Update(rating_sorted_meal_names)
+                search_by_name(values['_INPUT_'], cookbook, tab_window, rating_sorted_meal_names)
                 sorted_rating = True
+                sorted_time = False
             if event == '_SORT_BY_TIME_':
-                sort_by_time(cookbook, tab_window, layout)
+                time_sorted_meal_names = sort_by_time(cookbook, tab_window, layout)
+                tab_window.Element('_LIST_').Update(time_sorted_meal_names)
+                search_by_name(values['_INPUT_'], cookbook, tab_window, time_sorted_meal_names)
                 sorted_time = True
+                sorted_rating = False
 
             if event == '_LIST_' and len(values['_LIST_']):
                 selected_item = values['_LIST_'][0]
@@ -172,8 +183,8 @@ def open_search_type(type):
     
     
 
-def search_by_name(search, cookbook, window):
-    new_values = [x for x in meal_names if search.lower() in x.lower()]
+def search_by_name(search, cookbook, window, meals):
+    new_values = [x for x in meals if search.lower() in x.lower()]
     window.Element('_LIST_').Update(new_values)
 
 def search_by_ingredients(search_ingredient, cookbook, window):
@@ -185,13 +196,14 @@ def sort_by_rating(cookbook, window, current_tab_layout):
     cookbook.mergesort_by_rating()
     updated_meal_names = [recipe.name for recipe in cookbook.recipe_list]
     updated_meal_names.reverse()
-    window.Element('_LIST_').Update(updated_meal_names)
+    return updated_meal_names
 
 def sort_by_time(cookbook, window, current_tab_layout):
     cookbook.quicksort_by_time()
     cookbook.recipe_list = cookbook.recipe_list[5262:] + cookbook.recipe_list[:5262]
     updated_meal_names = [recipe.name for recipe in cookbook.recipe_list]
-    window.Element('_LIST_').Update(updated_meal_names)
+    return updated_meal_names
+    
 
 def crawl_image(recipe_name):
     # Function to crawl for the image of the specified recipe
