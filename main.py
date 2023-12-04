@@ -1,11 +1,9 @@
-from recipe import Recipe
 from cookbook import CookBook
 import PySimpleGUI as sg           
-from PIL import Image, ImageTk
+from PIL import Image
 from io import BytesIO
 import requests
 import webbrowser
-import bs4
 from icrawler.builtin import GoogleImageCrawler, GoogleFeeder, GoogleParser
 from customlinkprinter import CustomLinkPrinter
 import requests
