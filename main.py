@@ -225,6 +225,7 @@ def crawl_image(recipe_name):
     google_crawler = GoogleImageCrawler(**init_params)
     google_crawler.downloader.file_urls = []
     google_crawler.crawl(keyword=recipe_name, **params)
+    print(f"Debug: Retrieved file URLs: {google_crawler.downloader.file_urls}")
     return google_crawler.downloader.file_urls
 
 # Initialize cookbook...
